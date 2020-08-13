@@ -18,16 +18,18 @@ adri713.fit(features,labels)
 pygame.init()
 pygame.display.set_caption('Tic-Tac-Toe')
 
+pygame.display.set_icon(pygame.image.load('icon.png'))
 #
 pvp = 0
 pvai = 1
 game_mode = pvai
-game_inprocess = 0
-game_over = 1
+game_inmenu = 0
+game_inprocess = 1
+game_over = 2
 end_time = time()
 winner = 0
 
-game_state = game_inprocess
+game_state = game_inmenu
 
 SCREEN_HEIGHT = 420
 SCREEN_WIDTH = 420
@@ -35,9 +37,15 @@ SCREEN_WIDTH = 420
 game_field_x = 62
 game_field_y = 62
 
+button_height = 47
+button_width = 132
+
 moves = 0
 x69 = 1
 o = 2
+
+pvp_button_coords = [ int(SCREEN_WIDTH / 2 - button_width / 2), int(SCREEN_HEIGHT / 2 - button_height / 2)]
+pvai_button_coords = [ int(SCREEN_WIDTH / 2 - button_width / 2), int(SCREEN_HEIGHT / 2 - button_height / 2) + button_height + 10 ]
 
 field = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
@@ -46,6 +54,8 @@ white = 255, 255, 255
 black = 0, 0, 0
 silver = 192,192,192
 darkgrey = 32,32,32
+green = 32, 168, 32
+red = 168, 32, 32
 #
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 #
@@ -149,12 +159,14 @@ while True:
 											game_state = game_over
 											end_time = time() + 3
 											winner = "It's a tie."
-	''' Drawings lmfao'''
-	screen.fill(darkgrey)
-	arial_font = pygame.font.Font(pygame.font.get_default_font(), 12)
-	string = "Moves made: " + str(moves)
-	rendering = arial_font.render(string, True, white)
-	screen.blit(rendering, (1,1))
+			elif game_state == game_inmenu:
+				x, y = pygame.mouse.get_pos()
+				if x >= pvp_button_coords[0] and x <= pvp_button_coords[0] + button_width and y >= pvp_button_coords[1] and y <= pvp_button_coords[1] + button_height:
+					game_mode = pvp
+					game_state = game_inprocess
+				if x >= pvai_button_coords[0] and x <= pvai_button_coords[0] + button_width and y >= pvai_button_coords[1] and y <= pvai_button_coords[1] + button_height:
+					game_mode = pvai
+					game_state =  game_inprocess
 	if game_state == game_over and end_time > time():
 		if winner == 'o' or winner == 'x':
 			string = "Player: "+ winner + " won!"
@@ -168,31 +180,54 @@ while True:
 		for i in range(len(field)):
 			for j in range(len(field)):
 				field[i][j] = 0
-	#Graphics bae graphics :D
-	pygame.draw.rect(screen, white, (game_field_x, game_field_y, SCREEN_WIDTH - game_field_x - 10, SCREEN_HEIGHT - game_field_y - 10), True)
-	
-	pygame.draw.line(screen, white, (game_field_x + (SCREEN_WIDTH-game_field_x)/3, game_field_y), (game_field_x + (SCREEN_WIDTH-game_field_x)/3, SCREEN_HEIGHT - 11))
-	
-	pygame.draw.line(screen, white, (game_field_x + ((SCREEN_WIDTH-game_field_x)/3) * 2, game_field_y), (game_field_x + ((SCREEN_WIDTH-game_field_x)/3) *2, SCREEN_HEIGHT - 11))
-	
-	pygame.draw.line(screen, white, (game_field_x, game_field_y +(SCREEN_HEIGHT-game_field_y)/3), (SCREEN_WIDTH - 11,  game_field_y +(SCREEN_HEIGHT-game_field_y)/3))
-	
-	pygame.draw.line(screen, white, (game_field_x, game_field_y +(SCREEN_HEIGHT-game_field_y)/3 * 2), (SCREEN_WIDTH - 11,  game_field_y +(SCREEN_HEIGHT-game_field_y)/3 * 2))
 
-	for i in range(len(field)):
-		for y in range(len(field[i])):
-			item = field[i][y]
-			if item != 0:
-				x_axis = int(game_field_x + (rectangle_w / 2) + (rectangle_w * y))
-				y_axis = int(game_field_y + (rectangle_h / 2) + (rectangle_h * i))
+	#Graphics goes here
+	screen.fill(darkgrey)
 
-				if item == o:
-					pygame.draw.circle(screen, white, (x_axis,y_axis), 24)
+	if game_state != game_inmenu:
 
-				elif item == x69:
+		arial_font = pygame.font.Font(pygame.font.get_default_font(), 12)
+		string = "Moves made: " + str(moves)
+		rendering = arial_font.render(string, True, white)
+		screen.blit(rendering, (1,1))
+
+		pygame.draw.rect(screen, white, (game_field_x, game_field_y, SCREEN_WIDTH - game_field_x - 10, SCREEN_HEIGHT - game_field_y - 10), True)
+		
+		pygame.draw.line(screen, white, (game_field_x + (SCREEN_WIDTH-game_field_x)/3, game_field_y), (game_field_x + (SCREEN_WIDTH-game_field_x)/3, SCREEN_HEIGHT - 11))
+		
+		pygame.draw.line(screen, white, (game_field_x + ((SCREEN_WIDTH-game_field_x)/3) * 2, game_field_y), (game_field_x + ((SCREEN_WIDTH-game_field_x)/3) *2, SCREEN_HEIGHT - 11))
+		
+		pygame.draw.line(screen, white, (game_field_x, game_field_y +(SCREEN_HEIGHT-game_field_y)/3), (SCREEN_WIDTH - 11,  game_field_y +(SCREEN_HEIGHT-game_field_y)/3))
+		
+		pygame.draw.line(screen, white, (game_field_x, game_field_y +(SCREEN_HEIGHT-game_field_y)/3 * 2), (SCREEN_WIDTH - 11,  game_field_y +(SCREEN_HEIGHT-game_field_y)/3 * 2))
+
+		for i in range(len(field)):
+			for y in range(len(field[i])):
+				item = field[i][y]
+				if item != 0:
+					x_axis = int(game_field_x + (rectangle_w / 2) + (rectangle_w * y))
+					y_axis = int(game_field_y + (rectangle_h / 2) + (rectangle_h * i))
 					font_size = 36
 					X_FONT = pygame.font.Font(pygame.font.get_default_font(), font_size)
-					text = X_FONT.render('X', True, white)
+
+					if item == o:
+						text = X_FONT.render('O', True, white)
+					elif item == x69:
+						text = X_FONT.render('X', True, white)
+
 					screen.blit(text, (x_axis - font_size/2,y_axis - font_size/2))
+	elif game_state == game_inmenu:
+		title = "Tic-tac-toe711"
+		title_size = 34
+		arial_font = pygame.font.Font(pygame.font.get_default_font(), 12)
+		title_font = pygame.font.Font(pygame.font.get_default_font(), title_size)
+		title_gui  = title_font.render(title, True, red)
+		screen.blit(title_gui, (SCREEN_WIDTH / 2 - len(title) * title_size / 4, 26))
+		text_gui = arial_font.render("Player vs Player", True, white)
+		pygame.draw.rect(screen, green, (pvp_button_coords[0], pvp_button_coords[1], button_width, button_height))
+		pygame.draw.rect(screen, green, (pvai_button_coords[0], pvai_button_coords[1], button_width, button_height))
+		screen.blit(text_gui, (pvp_button_coords[0] + 6,pvp_button_coords[1] + 6))
+		text_gui = arial_font.render("Player vs AI", True, white)
+		screen.blit(text_gui, (pvai_button_coords[0] + 6,pvai_button_coords[1] + 6))
 
 	pygame.display.flip()
