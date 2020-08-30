@@ -23,5 +23,7 @@ python game.py
 ## Game pictures
 
 ![test image](screenshots/screenshot1.PNG)
+
 ![test image1](screenshots/screenshot2.PNG)
+
 ![test image2](screenshots/screenshot3.PNG)
