@@ -1,9 +1,9 @@
 # Tic-tac-toe711
 A simple Tic-Tac-Toe game that makes use of machine learning for its AI and allows you to train the model in training mode.
 ## dependencies
-*Python3
-*numpy
-*scikitlearn
+* Python3
+* numpy
+* scikitlearn
 
 ## installation
 1. Install the latest python3 version  https://www.python.org/
