@@ -9,7 +9,7 @@ A simple Tic-Tac-Toe game that makes use of machine learning for its AI and allo
 1. Install the latest python3 version  https://www.python.org/
 2. Clone repository
 ```
-git clone https://github.com/adri711/m711forum-django-.git
+git clone https://github.com/adri711/Tic-tac-toe711.git
 ```
 3. Install the following dependencies with pip
 ```
